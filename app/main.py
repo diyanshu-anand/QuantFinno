@@ -8,6 +8,15 @@ from app.routers import customers
 from app.routers import reports
 from fastapi.middleware.cors import CORSMiddleware
 
+
+
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="Finance Backend")
+app.include_router(transactions.router)
+app.include_router(customers.router)
+app.include_router(reports.router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -19,12 +28,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-models.Base.metadata.create_all(bind=engine)
-
-app = FastAPI(title="Finance Backend")
-app.include_router(transactions.router)
-app.include_router(customers.router)
-app.include_router(reports.router)
 
 def get_db():
     db = SessionLocal()
