@@ -24,3 +24,7 @@ class TransactionCreate(BaseModel):
     amount_paid: float
     payment_mode: str | None = None
     note: str | None = None
+
+
+class CustomerLogin(BaseModel):
+    mobile: str
