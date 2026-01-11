@@ -28,3 +28,9 @@ def create_customer(
     db.refresh(customer)
 
     return customer
+
+
+@router.get("/")
+def get_customers(db: Session = Depends(get_db)):
+    customers = db.query(Customer).all()
+    return customers
