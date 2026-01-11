@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.models import Customer
@@ -34,3 +34,11 @@ def create_customer(
 def get_customers(db: Session = Depends(get_db)):
     customers = db.query(Customer).all()
     return customers
+
+
+@router.post("/login", response_model=CustomerResponse)
+def login_customer(mobile: str, db: Session = Depends(get_db)):
+    customer = db.query(Customer).filter(Customer.phone == mobile).first()
+    if not customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    return customer
