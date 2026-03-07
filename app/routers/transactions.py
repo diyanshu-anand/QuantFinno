@@ -54,6 +54,7 @@ from datetime import date
 from uuid import UUID
 from app.database import SessionLocal
 from app.models import Transaction, Customer
+from sqlalchemy import func
 
 router = APIRouter(prefix="/transactions", tags=["Transactions"])
 
@@ -137,3 +138,55 @@ def export_transactions(db: Session = Depends(get_db)):
         "count": len(result),
         "transactions": result
     }
+
+
+@router.get("/vendor/{customer_id}")
+def get_vendor_transactions(customer_id: UUID, db: Session = Depends(get_db)):
+
+    txns = (
+        db.query(Transaction)
+        .filter(Transaction.customer_id == customer_id)
+        .order_by(Transaction.date.desc())
+        .all()
+    )
+
+    result = []
+
+    for txn in txns:
+        result.append({
+            "id": str(txn.id),
+            "date": txn.date,
+            "amount_due": float(txn.amount_due),
+            "amount_paid": float(txn.amount_paid),
+            "payment_mode": txn.payment_mode,
+            "particulars": txn.note,
+            "balance": float(txn.amount_due - txn.amount_paid)
+        })
+
+    return result
+
+
+@router.get("/dues")
+def get_vendor_dues(db: Session = Depends(get_db)):
+
+    results = (
+        db.query(
+            Customer.id,
+            Customer.name,
+            func.sum(Transaction.amount_due - Transaction.amount_paid).label("total_due")
+        )
+        .join(Transaction, Customer.id == Transaction.customer_id)
+        .group_by(Customer.id)
+        .all()
+    )
+
+    data = []
+
+    for r in results:
+        data.append({
+            "customer_id": str(r.id),
+            "customer_name": r.name,
+            "total_due": float(r.total_due)
+        })
+
+    return data
