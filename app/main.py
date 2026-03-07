@@ -8,6 +8,10 @@ from app.routers import customers
 from app.routers import reports
 from fastapi.middleware.cors import CORSMiddleware
 
+
+
+from fastapi.middleware.cors import CORSMiddleware
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Finance Backend")
@@ -24,6 +28,20 @@ app.add_middleware(
 app.include_router(transactions.router)
 app.include_router(customers.router)
 app.include_router(reports.router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
+        "https://quantfinno.onrender.com"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 def get_db():
     db = SessionLocal()
