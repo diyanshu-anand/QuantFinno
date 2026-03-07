@@ -51,17 +51,14 @@ def get_db():
         db.close()
 
 
-@app.post("/customers")
-def add_customer(customer: schemas.CustomerCreate, db: Session = Depends(get_db)):
-    obj = models.Customer(**customer.dict())
-    db.add(obj)
-    db.commit()
-    return obj
+# @app.post("/customers")
+# def add_customer(customer: schemas.CustomerCreate, db: Session = Depends(get_db)):
+#     obj = models.Customer(**customer.dict())
+#     db.add(obj)
+#     db.commit()
+#     return obj
 
 
-@app.post("/transactions")
-def add_transaction(txn: schemas.TransactionCreate, db: Session = Depends(get_db)):
-    return crud.create_transaction(db, txn)
-
-
-
+# @app.post("/transactions")
+# def add_transaction(txn: schemas.TransactionCreate, db: Session = Depends(get_db)):
+#     return crud.create_transaction(db, txn)
