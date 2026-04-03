@@ -104,6 +104,7 @@ app.add_middleware(
         "http://localhost:5174",
         "http://localhost:5175",
         "https://quantfinno.onrender.com"
+        "https://quant-finno-frontend-e596qiv0l.vercel.app/"
     ],
     allow_credentials=True,
     allow_methods=["*"],
