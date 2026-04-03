@@ -38,3 +38,19 @@ class Invoice(Base):
 
 
 #  Date of transaction, payment mode, amount previously due, amount paid
+
+# Rent based schema updation
+class Rent(Base):
+    __tablename__ = "rent"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    location = Column(String, default="NayaRaipur")
+
+    txn_id = Column(String, unique=True)
+    note = Column(String)
+
+    amount = Column(Numeric(10,2), default=3000)
+    status = Column(String, default="pending")  # pending / confirmed
+    confirmed_at = Column(DateTime, nullable=True)
+
+    created_at = Column(DateTime, server_default=func.now())

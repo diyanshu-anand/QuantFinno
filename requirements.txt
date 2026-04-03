@@ -3,3 +3,5 @@ uvicorn
 sqlalchemy
 python-dotenv
 pydantic
+qrcode[pil]
+python-multipart
