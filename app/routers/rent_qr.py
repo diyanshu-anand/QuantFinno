@@ -83,7 +83,7 @@ def get_rent_qr(request: Request, db: Session = Depends(get_db)):
     rent_entry = Rent(
         txn_id=qr_data["txn_id"],
         note=qr_data["note"],
-        amount=3000,
+        amount=9000,
         status="pending",
         location="NayaRaipur"
     )
